@@ -29,6 +29,7 @@ def main(checkpoint, output_dir, device):
     
     # load checkpoint
     payload = torch.load(open(checkpoint, 'rb'), pickle_module=dill)
+    print(f"payload keys: {payload.keys()}")
     cfg = payload['cfg']
     cls = hydra.utils.get_class(cfg._target_)
     workspace = cls(cfg, output_dir=output_dir)
