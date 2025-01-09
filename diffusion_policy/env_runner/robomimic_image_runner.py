@@ -9,16 +9,16 @@ import h5py
 import math
 import dill
 import wandb.sdk.data_types.video as wv
-from diffusion_policy.gym_util.async_vector_env import AsyncVectorEnv
-from diffusion_policy.gym_util.sync_vector_env import SyncVectorEnv
-from diffusion_policy.gym_util.multistep_wrapper import MultiStepWrapper
-from diffusion_policy.gym_util.video_recording_wrapper import VideoRecordingWrapper, VideoRecorder
+from ..gym_util.async_vector_env import AsyncVectorEnv
+from ..gym_util.sync_vector_env import SyncVectorEnv
+from ..gym_util.multistep_wrapper import MultiStepWrapper
+from ..gym_util.video_recording_wrapper import VideoRecordingWrapper, VideoRecorder
 from diffusion_policy.model.common.rotation_transformer import RotationTransformer
 
-from diffusion_policy.policy.base_image_policy import BaseImagePolicy
-from diffusion_policy.common.pytorch_util import dict_apply
-from diffusion_policy.env_runner.base_image_runner import BaseImageRunner
-from diffusion_policy.env.robomimic.robomimic_image_wrapper import RobomimicImageWrapper
+from ..policy.base_image_policy import BaseImagePolicy
+from ..common.pytorch_util import dict_apply
+from ..env_runner.base_image_runner import BaseImageRunner
+from ..env.robomimic.robomimic_image_wrapper import RobomimicImageWrapper
 import robomimic.utils.file_utils as FileUtils
 import robomimic.utils.env_utils as EnvUtils
 import robomimic.utils.obs_utils as ObsUtils
