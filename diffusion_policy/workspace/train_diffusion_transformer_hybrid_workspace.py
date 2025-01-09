@@ -19,15 +19,15 @@ import wandb
 import tqdm
 import numpy as np
 import shutil
-from diffusion_policy.workspace.base_workspace import BaseWorkspace
-from diffusion_policy.policy.diffusion_transformer_hybrid_image_policy import DiffusionTransformerHybridImagePolicy
-from diffusion_policy.dataset.base_dataset import BaseImageDataset
-from diffusion_policy.env_runner.base_image_runner import BaseImageRunner
-from diffusion_policy.common.checkpoint_util import TopKCheckpointManager
-from diffusion_policy.common.json_logger import JsonLogger
-from diffusion_policy.common.pytorch_util import dict_apply, optimizer_to
-from diffusion_policy.model.diffusion.ema_model import EMAModel
-from diffusion_policy.model.common.lr_scheduler import get_scheduler
+from base_workspace import BaseWorkspace
+from ..policy.diffusion_transformer_hybrid_image_policy import DiffusionTransformerHybridImagePolicy
+from ..dataset.base_dataset import BaseImageDataset
+from ..env_runner.base_image_runner import BaseImageRunner
+from ..common.checkpoint_util import TopKCheckpointManager
+from ..common.json_logger import JsonLogger
+from ..common.pytorch_util import dict_apply, optimizer_to
+from ..model.diffusion.ema_model import EMAModel
+from ..model.common.lr_scheduler import get_scheduler
 
 OmegaConf.register_new_resolver("eval", eval, replace=True)
 
