@@ -6,17 +6,17 @@ import torch.nn.functional as F
 from einops import rearrange, reduce
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 
-from diffusion_policy.model.common.normalizer import LinearNormalizer
-from diffusion_policy.policy.base_image_policy import BaseImagePolicy
-from diffusion_policy.model.diffusion.transformer_for_diffusion import TransformerForDiffusion
-from diffusion_policy.model.diffusion.mask_generator import LowdimMaskGenerator
-from diffusion_policy.common.robomimic_config_util import get_robomimic_config
+from ..model.common.normalizer import LinearNormalizer
+from ..policy.base_image_policy import BaseImagePolicy
+from ..model.diffusion.transformer_for_diffusion import TransformerForDiffusion
+from ..model.diffusion.mask_generator import LowdimMaskGenerator
+from ..common.robomimic_config_util import get_robomimic_config
 from robomimic.algo import algo_factory
 from robomimic.algo.algo import PolicyAlgo
 import robomimic.utils.obs_utils as ObsUtils
 import robomimic.models.base_nets as rmbn
-import diffusion_policy.model.vision.crop_randomizer as dmvc
-from diffusion_policy.common.pytorch_util import dict_apply, replace_submodules
+import model.vision.crop_randomizer as dmvc
+from ..common.pytorch_util import dict_apply, replace_submodules
 
 
 class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
