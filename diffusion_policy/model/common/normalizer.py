@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from ...common.pytorch_util import dict_apply
-from dict_of_tensor_mixin import DictOfTensorMixin
+from .dict_of_tensor_mixin import DictOfTensorMixin
 
 
 class LinearNormalizer(DictOfTensorMixin):
