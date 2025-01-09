@@ -4,12 +4,12 @@ import numpy as np
 import h5py
 from tqdm import tqdm
 import copy
-from diffusion_policy.common.pytorch_util import dict_apply
-from diffusion_policy.dataset.base_dataset import BaseLowdimDataset, LinearNormalizer
-from diffusion_policy.model.common.normalizer import LinearNormalizer, SingleFieldLinearNormalizer
-from diffusion_policy.model.common.rotation_transformer import RotationTransformer
-from diffusion_policy.common.replay_buffer import ReplayBuffer
-from diffusion_policy.common.sampler import (
+from ..common.pytorch_util import dict_apply
+from .base_dataset import BaseLowdimDataset, LinearNormalizer
+from ..model.common.normalizer import LinearNormalizer, SingleFieldLinearNormalizer
+from ..model.common.rotation_transformer import RotationTransformer
+from ..common.replay_buffer import ReplayBuffer
+from ..common.sampler import (
     SequenceSampler, get_val_mask, downsample_mask)
 from diffusion_policy.common.normalize_util import (
     robomimic_abs_action_only_normalizer_from_stat,

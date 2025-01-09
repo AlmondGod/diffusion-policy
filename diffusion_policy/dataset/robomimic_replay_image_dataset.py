@@ -14,14 +14,14 @@ from threadpoolctl import threadpool_limits
 import concurrent.futures
 import multiprocessing
 from omegaconf import OmegaConf
-from diffusion_policy.common.pytorch_util import dict_apply
-from diffusion_policy.dataset.base_dataset import BaseImageDataset, LinearNormalizer
-from diffusion_policy.model.common.normalizer import LinearNormalizer, SingleFieldLinearNormalizer
-from diffusion_policy.model.common.rotation_transformer import RotationTransformer
-from diffusion_policy.codecs.imagecodecs_numcodecs import register_codecs, Jpeg2k
-from diffusion_policy.common.replay_buffer import ReplayBuffer
-from diffusion_policy.common.sampler import SequenceSampler, get_val_mask
-from diffusion_policy.common.normalize_util import (
+from ..common.pytorch_util import dict_apply
+from .base_dataset import BaseImageDataset, LinearNormalizer
+from ..model.common.normalizer import LinearNormalizer, SingleFieldLinearNormalizer
+from ..model.common.rotation_transformer import RotationTransformer
+from ..codecs.imagecodecs_numcodecs import register_codecs, Jpeg2k
+from ..common.replay_buffer import ReplayBuffer
+from ..common.sampler import SequenceSampler, get_val_mask
+from ..common.normalize_util import (
     robomimic_abs_action_only_normalizer_from_stat,
     robomimic_abs_action_only_dual_arm_normalizer_from_stat,
     get_range_normalizer_from_stat,
