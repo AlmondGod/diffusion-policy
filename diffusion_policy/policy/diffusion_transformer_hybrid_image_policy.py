@@ -225,6 +225,19 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         for k, v in obs_dict.items():
             print(f"{k}: {v.shape}")
         
+        print("\nNormalizer info:")
+        print(f"Normalizer type: {type(self.normalizer)}")
+        if hasattr(self.normalizer, '_keys'):
+            print(f"Normalizer keys: {self.normalizer._keys}")
+        
+        # normalize input
+        try:
+            nobs = self.normalizer.normalize(obs_dict)
+            print("\nNormalized successfully")
+        except Exception as e:
+            print(f"\nNormalizer error: {str(e)}")
+            raise e
+        
         # Print obs_encoder info
         print("\nObs encoder info:")
         print(f"Type: {type(self.obs_encoder)}")
@@ -236,13 +249,6 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
                     print(f"Expected input shape: {v.input_shape}")
         
         assert 'past_action' not in obs_dict # not implemented yet
-        
-        # normalize input
-        nobs = self.normalizer.normalize(obs_dict)
-        
-        print("\nNormalized obs shapes:")
-        for key, value in nobs.items():
-            print(f"{key}: {value.shape}")
         
         value = next(iter(nobs.values()))
         B, To = value.shape[:2]
