@@ -220,18 +220,23 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
 
 
     def predict_action(self, obs_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
-        """
-        obs_dict: must include "obs" key
-        result: must include "action" key
-        """
+        print("\n=== Policy Debug ===")
+        print("Input obs_dict:")
+        for k, v in obs_dict.items():
+            print(f"{k}: {v.shape}")
+        
+        # Print obs_encoder info
+        print("\nObs encoder info:")
+        print(f"Type: {type(self.obs_encoder)}")
+        if hasattr(self.obs_encoder, 'obs_nets'):
+            for k, v in self.obs_encoder.obs_nets.items():
+                print(f"\nNet {k}:")
+                print(f"Type: {type(v)}")
+                if hasattr(v, 'input_shape'):
+                    print(f"Expected input shape: {v.input_shape}")
+        
         assert 'past_action' not in obs_dict # not implemented yet
         
-        # Debug prints for input shapes
-        print("\n=== Debug Image Shapes ===")
-        print("Input obs_dict shapes:")
-        for key, value in obs_dict.items():
-            print(f"{key}: {value.shape}")
-
         # normalize input
         nobs = self.normalizer.normalize(obs_dict)
         
