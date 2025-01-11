@@ -225,8 +225,20 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         result: must include "action" key
         """
         assert 'past_action' not in obs_dict # not implemented yet
+        
+        # Debug prints for input shapes
+        print("\n=== Debug Image Shapes ===")
+        print("Input obs_dict shapes:")
+        for key, value in obs_dict.items():
+            print(f"{key}: {value.shape}")
+
         # normalize input
         nobs = self.normalizer.normalize(obs_dict)
+        
+        print("\nNormalized obs shapes:")
+        for key, value in nobs.items():
+            print(f"{key}: {value.shape}")
+        
         value = next(iter(nobs.values()))
         B, To = value.shape[:2]
         T = self.horizon
@@ -234,9 +246,12 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         Do = self.obs_feature_dim
         To = self.n_obs_steps
 
-        # build input
-        device = self.device
-        dtype = self.dtype
+        print(f"\nDimension values:")
+        print(f"B (batch size): {B}")
+        print(f"To (obs steps): {To}")
+        print(f"T (horizon): {T}")
+        print(f"Da (action dim): {Da}")
+        print(f"Do (obs feature dim): {Do}")
 
         # handle different ways of passing observation
         cond = None
@@ -244,13 +259,29 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
         cond_mask = None
         if self.obs_as_cond:
             this_nobs = dict_apply(nobs, lambda x: x[:,:To,...].reshape(-1,*x.shape[2:]))
-            nobs_features = self.obs_encoder(this_nobs)
+            print("\nReshaped obs before encoder:")
+            for key, value in this_nobs.items():
+                print(f"{key}: {value.shape}")
+            
+            try:
+                nobs_features = self.obs_encoder(this_nobs)
+                print(f"\nEncoder output shape: {nobs_features.shape}")
+            except Exception as e:
+                print("\nError in obs_encoder:")
+                print(f"Error type: {type(e)}")
+                print(f"Error message: {str(e)}")
+                # Print obs_encoder expected input shape
+                print("\nObs encoder expected shapes:")
+                if hasattr(self.obs_encoder, 'input_shape'):
+                    print(f"Expected input shape: {self.obs_encoder.input_shape}")
+                raise e
+
             # reshape back to B, To, Do
             cond = nobs_features.reshape(B, To, -1)
             shape = (B, T, Da)
             if self.pred_action_steps_only:
                 shape = (B, self.n_action_steps, Da)
-            cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
+            cond_data = torch.zeros(size=shape, device=self.device, dtype=self.dtype)
             cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
         else:
             # condition through impainting
@@ -259,10 +290,15 @@ class DiffusionTransformerHybridImagePolicy(BaseImagePolicy):
             # reshape back to B, To, Do
             nobs_features = nobs_features.reshape(B, To, -1)
             shape = (B, T, Da+Do)
-            cond_data = torch.zeros(size=shape, device=device, dtype=dtype)
+            cond_data = torch.zeros(size=shape, device=self.device, dtype=self.dtype)
             cond_mask = torch.zeros_like(cond_data, dtype=torch.bool)
             cond_data[:,:To,Da:] = nobs_features
             cond_mask[:,:To,Da:] = True
+
+        print("\nFinal condition shapes:")
+        print(f"cond: {None if cond is None else cond.shape}")
+        print(f"cond_data: {cond_data.shape}")
+        print(f"cond_mask: {cond_mask.shape}")
 
         # run sampling
         nsample = self.conditional_sample(
